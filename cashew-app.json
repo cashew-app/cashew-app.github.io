@@ -1,0 +1,15 @@
+{
+    "name": "Cashew App",
+    "short_name": "CA",
+    "description": "This app helps to track cashback for diffrent banks, promotions, etc.",
+    "start_url": "/",
+    "theme_color": "#fdb34e",
+    "background_color": "#fdb34e",
+    "display": "standalone",
+    "icons": [
+      {
+        "src": "favicon.ico",
+        "sizes": "64x64"
+      }
+    ]
+}
