@@ -1,0 +1,7 @@
+
+ - розробити HTML прототип
+  - https://getuikit.com/docs/grid
+  - file:///Users/sonych/sdev/cashew-app.github.io/index.html
+ - додати JS, який буде зберігати/рендерити/шукати по кешбекам
+    - https://alpinejs.dev/
+

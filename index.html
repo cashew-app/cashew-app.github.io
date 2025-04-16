@@ -6,33 +6,93 @@
     <title>Cashew App</title>
     <link rel="manifest" href="cashew-app.json" />
     <link rel="icon" href="assets/favicon.png" />
-    <!-- <link rel="stylesheet" href="style.css" /> -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.23.6/dist/css/uikit.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.12.0/dist/cdn.min.js" defer></script>
+    <!-- UIkit JS -->
+    <script defer src="https://cdn.jsdelivr.net/npm/uikit@3.23.6/dist/js/uikit.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/uikit@3.23.6/dist/js/uikit-icons.min.js"></script>
   </head>
   <body>
-    <header>
-        <h1>Cashew App</h1>
-    </header>
-    <div>
-        <input >
+    <div x-data="cashbackApp()" class="uk-container uk-margin-large-top">
+      <h1 class="uk-heading-line uk-text-center"><span>Cashew App</span></h1>
+
+      <div class="uk-margin">
+        <h2 class="uk-heading"><span>Кешбек</span></h2>
+    
+        <!-- Render banks and their cashbacks -->
+        <template x-if="Object.keys(banks).length > 0">
+          <div>
+            <template x-for="(cashbacks, bankName) in banks" :key="bankName">
+              <div class="uk-margin">
+                <h4 class="uk-heading-line"><span x-text="bankName"></span></h4>
+                <ul class="uk-list">
+                  <template x-for="(cashback, index) in cashbacks" :key="index">
+                    <li>
+                      <span x-text="cashback.cashbackCategory"></span> - 
+                      <span x-text="cashback.cashbackPercentage + '%'"></span>
+                    </li>
+                  </template>
+                </ul>
+              </div>
+            </template>
+          </div>
+        </template>
+    
+        <!-- Message when no banks are available -->
+        <p x-show="Object.keys(banks).length === 0">Немає даних</p>
+      </div>
     </div>
-    <div>
-        <h3>Monobank</h3>
-        <p>Медицина - 2%</p>
-        <p>Продукти - 0.75%</p>
-    </div>
-    <div>
-        <h3>Sense</h3>
-        <p>Оплата гаджетом - 0.5%</p>
-        <p>Доступні ціни - 3%</p>
-        <p>Маркетплейси - 1.5%</p>
-    </div>
-    <div>
-        <h3>Приват</h3>
-        <p>WOG - 6%</p>
-    </div>
-    <div>
-        <h3>ПУМБ</h3>
-        <p>ОККО - 10%</p>
-        <p>Продукти - 2%</p>
-    </div>
+
+    <script>
+      function cashbackApp() {
+        return {
+          // Load banks from local storage or use default data
+          //banks: JSON.parse(localStorage.getItem('banks')) || {
+          banks: {
+            "Mono": [
+              { cashbackCategory: 'Продукти', cashbackPercentage: 1 },
+              { cashbackCategory: 'Медицина', cashbackPercentage: 2 }
+            ],
+            "Sense": [
+              { cashbackCategory: 'Оплата гаджетом', cashbackPercentage: 0.5 },
+              { cashbackCategory: 'Доступні ціни', cashbackPercentage: 3 },
+              { cashbackCategory: 'Маркетплейси', cashbackPercentage: 1.5 },
+              { cashbackCategory: 'Все для дому', cashbackPercentage: 1 },
+              { cashbackCategory: 'Кафе та ресторани', cashbackPercentage: 1 },
+            ],
+            "PrivatBank": [
+              { cashbackCategory: 'Аврора', cashbackPercentage: 5 },
+              { cashbackCategory: 'WOG', cashbackPercentage: 6 },
+              { cashbackCategory: 'Foxtrot', cashbackPercentage: 5 },
+            ],
+          },
+          newBank: {
+            name: '',
+            cashbackCategory: '',
+            cashbackPercentage: ''
+          },
+          addBank() {
+            if (!this.banks[this.newBank.name]) {
+              this.banks[this.newBank.name] = [];
+            }
+            this.banks[this.newBank.name].push({
+              cashbackCategory: this.newBank.cashbackCategory,
+              cashbackPercentage: this.newBank.cashbackPercentage
+            });
+            this.saveBanks();
+            this.newBank = { name: '', cashbackCategory: '', cashbackPercentage: '' };
+          },
+          removeBank(bankName) {
+            delete this.banks[bankName];
+            this.saveBanks();
+          },
+          saveBanks() {
+            // Save banks to local storage
+            localStorage.setItem('banks', JSON.stringify(this.banks));
+          }
+        };
+      }
+    </script>
+
+  </body>
 </html>
